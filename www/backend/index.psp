@@ -1,1 +1,12 @@
-<% print("Python") %>
+<%
+import time
+weekday = time.strftime('%A', time.localtime(time.time()))
+message = 'Hello World! This is a wonderful %s.' % weekday
+%>
+ 
+<html>
+<body>
+<h1><% req.write("Hello!") %></h1>
+<%=message%>
+</body>
+</html>

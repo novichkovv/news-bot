@@ -4,7 +4,7 @@ message = 'Python'
  
 <html>
 <body>
-<h1><% req.write("Hello!") %></h1>
+<h1><% req.write("Backend!") %></h1>
 <%=message%>
 </body>
 </html>

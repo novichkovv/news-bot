@@ -1,3 +1,4 @@
+<h1>Frontend</h1>
 <?php
 /**
  * Created by PhpStorm.
@@ -5,4 +6,4 @@
  * Date: 17.05.2016
  * Time: 15:17
  */
-echo 'frontend';
+echo 'PHP';

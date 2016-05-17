@@ -1,5 +1,5 @@
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
-php_value session.cookie_domain .agstrad.loc"
+RewriteRule ^(.*)$ /frontend/index.php?route=$1 [L,QSA]
+php_value session.cookie_domain .1nut.ru

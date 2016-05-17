@@ -1,7 +1,5 @@
 <%
-import time
-weekday = time.strftime('%A', time.localtime(time.time()))
-message = 'Hello World! This is a wonderful %s.' % weekday
+message = 'Python'
 %>
  
 <html>

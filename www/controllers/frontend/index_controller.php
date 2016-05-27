@@ -48,6 +48,7 @@ class index_controller extends controller
                     $html = str_get_html($content);
                     $content = $html->root;
                     $thumb = $content->find('img')[0]->src;
+                    $content->find('img')[0]->outertext = '';
                     $row = [];
                     $row['entry_id'] = $article['id'];
                     $row['stream_id'] = $article['origin']['streamId'];

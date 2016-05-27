@@ -9,7 +9,8 @@
     <meta name="keywords" content="<?php echo $meta['keywords']; ?>" />
     <meta name="author" content="<?php echo $meta['author']; ?>" />
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/libs/bootstrap.min.css" />
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<!--    <link rel="stylesheet" type="text/css" href="--><?php //echo SITE_DIR; ?><!--css/libs/bootstrap.min.css" />-->
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/libs/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/libs/responsive.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/frontend/style.css" />

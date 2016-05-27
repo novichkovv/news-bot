@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>API Documentation</title>
+</head>
+<body>
+    <h3>Общая Инфа</h3>
+    Url для API <i>http://paperboy.pro/api/:api_method/</i>,<br>
+    где <i>:api_method</i> - метод API описанный здесь (как ни странно)).<br>
+    Запросы могут передоваться через GET или POST в зависимости от метода.<br>
+    Результат выполнения выдается в формате JSON.<br>
+    Формат ошибок: <br>
+    {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;error: true,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;error_code: код ошибки,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;error_text: текст ошибки<br>
+    }
+    <h3>
+        Авторизация
+    </h3>
+    Авторизация проводится проверкой GET или POST параметра 'secret'.
+    <h3>
+        Методы
+    </h3>
+    <hr>
+    <h4>
+        <span class="text-mute">GET</span> feed
+    </h4>
+    - передает подборку из 10 постов для пользоавтеля
+    <h5>Параметры</h5>
+    <table border="1" cellpadding="4" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Параметр</th>
+            <th>Обязятельный</th>
+            <th>Пояснение</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>fb_id</td>
+            <th>Да</th>
+            <td>ID пользователя в Facebook</td>
+        </tr>
+        </tbody>
+    </table>
+    <h5>
+        Ответ
+    </h5>
+    <i>id</i> - ID у нас в системе<br>
+    <i>entry_id</i> - ID поста в Feedly<br>
+    <i>stream_id</i> - ID stream (категория или фид) в Feedly<br>
+    <i>thumbnail</i> - заглавное изображение<br>
+    <i>title</i><br>
+    <i>summary</i><br>
+    <i>keywords</i><br>
+    <i>author</i><br>
+    <i>publish_date</i><br>
+    <i>source_url</i> - Ссылка на первоначальный источник<br>
+    <i>create_date</i> - Дата сохранение в нашу БД<br>
+    <hr>
+<style>
+    .text-mute {
+        color: #777;
+    }
+</style>
+</body>
+</html>

@@ -1,0 +1,143 @@
+/* <COMMON */
+.container-fluid {
+    padding-right: 55px;
+    padding-left: 55px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.dz-success-mark {
+    display: none;
+}
+.dz-error-mark {
+    display: none;
+}
+.blue-frame {
+    background-color: #428bca;
+    padding: 10px;
+}
+.nestable-edit {
+    position: absolute;
+    left: 321px;
+    z-index: 20;
+    margin-top: -36px;
+}
+
+.nestable-delete {
+    position: absolute;
+    left: 305px;
+    z-index: 20;
+    margin-top: -36px;
+}
+
+/*checkbox*/
+#log {
+    display: none;
+}
+
+#log-button {
+    height: 10px;
+    background-color: #eee;
+    cursor: pointer;
+}
+.note-editable {
+    border: 1px solid #dedede !important;
+    /*border-right: 1px solid #dedede;*/
+}
+.note-editor .note-toolbar {
+    border: 1px solid #dedede;
+}
+.note-editor {
+    border: none !important;
+}
+
+.validate-message {
+    display: none;
+    color: #fb1e15;
+    font-size: 22px;
+    padding: 5px 10px;
+}
+.has-error {
+    border: 1px solid red;
+    box-shadow: 0 0 2px red;
+}
+.has-error-note {
+    border: 1px solid red !important;
+    box-shadow: 0 0 2px red !important;
+}
+/* COMMON> */
+
+/* <DATATALES */
+.custom-datatable .dataTables_filter{
+    display: none;
+}
+.custom-datatable .datatable-footer {
+    text-align: center;
+}
+.custom-datatable .paginate_button {
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 6px 13px;
+}
+.custom-datatable .paginate_button.current {
+    color: #222;
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
+.custom-datatable .paginate_button:disabled {
+    color: #ccc !important;
+    border: 1px solid #eee;
+}
+.custom-datatable .dataTables_paginate.paging_simple_numbers {
+    margin: 10px;
+}
+/* DATATALES> */
+
+.product_table_image {
+    max-height: 50px;
+    max-width: 50px;
+}
+.page-content {
+    background-color: #cdf1f4 !important;
+    min-height: 600px;
+}
+
+#product_category_form {
+    list-style: none;
+}
+
+#product_category_form ul{
+    list-style: none;
+}
+.list-style-none {
+    list-style: none;
+}
+#product_thumbnail {
+    max-width: 90%;
+}
+.btn-icon-only.btn-default.close {
+    border: 1px solid grey;
+    border-radius: 25px;
+}
+.btn-icon-only.btn-default.close-btn:before {
+    content: "\f00d";
+    font-family: FontAwesome;
+    color: #a0a0a0;
+    padding-top: 3px;
+}
+.portlet > .portlet-title > .actions .btn-icon-only.btn-default {
+    padding: 3px 5px 8px 6px !important;
+}
+.select2-dropdown {
+    z-index: 10051 !important;
+}
+.form-control {
+    width: 100% !important;
+}
+.select2.select2-container {
+    width: 100% !important;
+}
+
+#preview img{
+    max-width: 100%;
+}

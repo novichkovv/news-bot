@@ -1,0 +1,28 @@
+img {
+    max-width: 100%;
+}
+#articles {
+    max-width: 600px;
+}
+ #articles img{
+     /*width: 100%;*/
+ }
+ .article-content {
+     font-size: 20px;
+     font-family: Tahoma;
+     text-align: justify;
+ }
+ iframe {
+     max-width: 100%;
+ }
+.category {
+    margin-bottom: 30px;
+    text-transform: capitalize;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: sans-serif;
+    border: 1px solid #eee;
+}
+.category .title {
+    padding: 7px 13px;
+}

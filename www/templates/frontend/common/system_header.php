@@ -13,11 +13,13 @@
 <!--    <link rel="stylesheet" type="text/css" href="--><?php //echo SITE_DIR; ?><!--css/libs/bootstrap.min.css" />-->
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/libs/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/libs/responsive.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/libs/swiper.min.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_DIR; ?>css/frontend/style.css" />
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script type="text/javascript" src="<?php echo SITE_DIR; ?>js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo SITE_DIR; ?>js/libs/swiper/swiper.min.js"></script>
     <script type="text/javascript" src="<?php echo SITE_DIR; ?>js/common/common.js"></script>
 </head>
 

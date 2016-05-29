@@ -59,6 +59,21 @@
         <div class="fb-send-to-messenger fb_iframe_widget fb_iframe_widget_fluid" messenger_app_id="235505446824664" page_id="515535461968215" data-ref="hi" color="white" size="xlarge" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=235505446824664&amp;color=white&amp;container_width=262&amp;locale=en_US&amp;messenger_app_id=235505446824664&amp;page_id=515535461968215&amp;ref=hi&amp;sdk=joey&amp;size=xlarge" style="display: block; width: 100%; height: auto;"><span style="vertical-align: bottom; width: 0px; height: 0px;"><iframe name="f2083aeeb827ccc" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:send_to_messenger Facebook Social Plugin" src="https://www.facebook.com/v2.5/plugins/send_to_messenger.php?app_id=235505446824664&amp;channel=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D42%23cb%3Dfd2229c334d9e4%26domain%3Dfacebookmobile.azurewebsites.net%26origin%3Dhttp%253A%252F%252Ffacebookmobile.azurewebsites.net%252Ff32e2143607f068%26relation%3Dparent.parent&amp;color=white&amp;container_width=262&amp;locale=en_US&amp;messenger_app_id=235505446824664&amp;page_id=515535461968215&amp;ref=hi&amp;sdk=joey&amp;size=xlarge" style="border: none; visibility: visible; height: 0px; position: static; width: 0px; min-width: 100%;" class=""></iframe></span></div>
   */ ?>
  </div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <?php foreach ($articles as $article): ?>
+                <div class="swiper-slide">
+                    <div class="img_wrap">
+                        <img src="<?php echo $article['thumbnail']; ?>" alt="<?php echo $article['title']; ?>" />
+                    </div>
+                    <div class="slider-title">
+                        <?php echo $article['title']; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <div style="height: 100px"></div>
 </article>
 <script type="text/javascript">
 
@@ -67,6 +82,11 @@
         $('img').removeAttr('height');
         $('img').removeAttr('width');
         scroll();
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            spaceBetween: 10
+        });
     });
 
     function scroll() {

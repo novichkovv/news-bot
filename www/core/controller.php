@@ -61,6 +61,7 @@ abstract class controller extends base
         {
 //            $this->sidebar();
         }
+        $this->init();
         $this->action_name = $action . ($this->check_auth ? '_na' : '');
     }
 
@@ -169,9 +170,7 @@ abstract class controller extends base
      */
     protected function checkAuth()
     {
-        $this->user = array(
-            'id' => 1
-        );
+        $this->user = $this->model('users')->getById(1);
 //        if($_SESSION['auth']) {
 //            if($user = $this->model('backend_users')->getByFields(array(
 //                'id' => $_SESSION['user']['id'],
@@ -437,12 +436,9 @@ abstract class controller extends base
         $this->appendToBody($this->fetch('common' . DS . 'delete_modal'));
     }
 
-    public function api()
+    protected function init()
     {
-        if(!$this->api_instance) {
-            $this->api_instance = new feedly_api_class($this->user['id']);
-        }
-        return $this->api_instance;
+
     }
 
 }

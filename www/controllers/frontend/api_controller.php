@@ -40,6 +40,9 @@ class api_controller extends controller
             exit;
         }
         $feed = $this->model('articles')->getAll('create_date DESC', 10);
+        foreach ($feed as $k => $v) {
+            $feed[$k]['article_url'] = SITE_DIR . '?article=' . $v['entry_id'];
+        }
         echo json_encode($feed, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
         exit;
     }

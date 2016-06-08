@@ -7,79 +7,171 @@
  */
 class category_controller extends controller
 {
+    private $locale = 'EN_en';
+    protected function init()
+    {
+        $locales = array(
+            'EN_en',
+            'RU_ru'
+        );
+        if(in_array($this->user['locale'], $locales)) {
+            $this->locale = $this->user['locale'];
+        }
+    }
+
     public function index()
     {
-//        var_dump(tools_class::checkImgUrl('http://storage.googleapis.com/site-assets/PSNTZO8gXFUe-cpCZyApw0vEKWPT4b14D6teBEocIAE_visual'));exit;
+        print_r($this->api()->getMix('topic/food', 30, 1, 24,'RU_ru'));exit;
+        $this->addStyle(SITE_DIR . 'css/libs/bootstrap.min.css');
         $list = array(
             'tech' => array(
                 'bg' => '#ffffff',
-                'title' => 'Tech',
+                'EN_en' => 'Tech',
+                'RU_ru' => 'Техника',
                 'color' => '#000'
             ),
             'food' => array(
                 'bg' => '#392a31',
-                'title' => 'Food',
+                'EN_en' => 'Food',
+                'RU_ru' => 'Еда',
                 'color' => '#fff'
             ),
             'news' => array(
                 'bg' => '#000000',
-                'title' => 'News',
+                'EN_en' => 'News',
+                'RU_ru' => 'Новости',
                 'color' => '#fff'
             ),
             'design' => array(
                 'bg' => '#170e0a',
-                'title' => 'Design',
+                'EN_en' => 'Design',
+                'RU_ru' => 'Дизайн',
                 'color' => '#fff'
             ),
             'fashion' => array(
                 'bg' => '#d4d1d5',
-                'title' => 'Fashion',
+                'EN_en' => 'Fashion',
+                'RU_ru' => 'Мода',
                 'color' => '#000'
             ),
             'business' => array(
                 'bg' => '#7c89a5',
-                'title' => 'Business',
+                'EN_en' => 'Business',
+                'RU_ru' => 'Бизнес',
                 'color' => '#fff'
             ),
             'gaming' => array(
                 'bg' => '#383b31',
-                'title' => 'Gaming',
+                'EN_en' => 'Gaming',
+                'RU_ru' => 'Игры',
                 'color' => '#fff'
             ),
             'marketing' => array(
                 'bg' => '#3a0202',
-                'title' => 'Marketing',
+                'EN_en' => 'Marketing',
+                'RU_ru' => 'Маркетинг',
                 'color' => '#fff'
             ),
             'photography' => array(
                 'bg' => '#686976',
-                'title' => 'Photography',
+                'EN_en' => 'Photography',
+                'RU_ru' => 'Фотография',
                 'color' => '#fff'
             ),
             'entrepreneurship' => array(
                 'bg' => '#1f323f',
-                'title' => 'Startups',
+                'EN_en' => 'Startups',
+                'RU_ru' => 'Стартап',
                 'color' => '#fff'
             ),
             'baking' => array(
                 'bg' => '#f4f1e9',
-                'title' => 'Baking',
+                'EN_en' => 'Baking',
+                'RU_ru' => 'Готовка',
                 'color' => '#000'
             ),
             'DIY' => array(
                 'bg' => '#f1b86c',
-                'title' => 'DIY',
+                'EN_en' => 'DIY',
+                'RU_ru' => 'Хэнд Мэйд',
                 'color' => '#000'
             )
 
         );
+        $this->render('locale', $this->locale);
         $this->render('list', $list);
-        $this->view('category' . DS . 'index');
+        $this->view('category' . DS . $this->locale);
     }
 
     public function index_na()
     {
         $this->index();
+    }
+
+    public function index_ajax()
+    {
+        switch ($_REQUEST['action']) {
+            case "subscribe":
+                /*
+                if(!$tag = $this->model('tags')->getByField('tag_name', $_POST['category'])) {
+                    $tag = array('tag_name' => $_POST['category']);
+                    $tag['id'] = $this->model('tags')->insert($tag);
+                }
+                $this->model('user_tags')->insert(array(
+                    'user_id' => $this->user['id'],
+                    'tag_id' => $tag['id']
+                ));
+                $query = $this->model('tag_queries')->getByField('tag_id', $tag['id']);
+                if(time() - strtotime($query['last_update']) > 3600) {
+                    require_once(ROOT_DIR . 'classes' . DS . 'simple_html_dom_class.php');
+                    $query['last_update'] = date('Y-m-d H:i:s');
+//                    $this->model('tag_queries')->insert($query);
+                    $feeds = $this->getTagFeeds($tag['tag_name']);
+                    print_r($feeds);
+                    foreach ($feeds as $feed) {
+                        if(time() - $feed['last_update'] >= 3600) {
+                            $this->model('feed_queries')->delete('feed_id', $feed['id']);
+                            $feed['last_update'] = date('Y-m-d H:i:s');
+                            $this->model('feeds')->insert($feed);
+                            $entries = $this->api()->getStream($feed['feed_id'])['items'];
+                            print_r($entries);
+                            foreach ($entries as $article) {
+                                print_r($article);
+                                if(!$row = $this->model('articles')->getByField('entry_id', $article['id'])) {
+                                    $content = $article['content']['content'];
+                                    $html = str_get_html($content);
+                                    $content = $html->root;
+                                    $thumb = $content->find('img')[0]->src;
+                                    $content->find('img')[0]->outertext = '';
+                                    $row = [];
+                                    $row['entry_id'] = $article['id'];
+                                    $row['stream_id'] = $article['origin']['streamId'];
+                                    $row['thumbnail'] = $thumb;
+                                    $row['content'] = $content;
+                                    $row['title'] = $article['title'];
+                                    $row['summary'] = $article['summary']['content'];
+                                    $row['keywords'] = implode(',', $article['keywords']);
+                                    $row['author'] = $article['author'];
+                                    $row['publish_date'] = date('Y-m-d H:i:s', round($article['published']/1000));
+                                    $row['source_url'] = $article['canonicalUrl'];
+                                    $row['create_date'] = date('Y-m-d H:i:s');
+                                    $row['id'] = $this->model('articles')->insert($row);
+                                }
+                                $this->model('feed_queries')->insert(array('feed_id' => $feed['id'], 'article_id' => $row['id']));
+                            }
+                        }
+                    }
+                }
+                */
+                exit;
+                break;
+        }
+    }
+
+    public function index_na_ajax()
+    {
+        $this->index_ajax();
+        exit;
     }
 
     public function search()
@@ -114,12 +206,12 @@ class category_controller extends controller
         $this->view('category' . DS . 'search');
     }
 
-    private function getTagFeeds()
+    private function getTagFeeds($key, $count = 3)
     {
         $feeds = [];
-        foreach ($this->api()->search($_GET['q'], 12, 'RU_ru')['results'] as $feed) {
+        foreach ($this->api()->search($key, $count, $this->locale)['results'] as $feed) {
             if($row = $this->model('feeds')->getByField('feed_id', $feed['feedId'])) {
-                if(strtotime(time() - $row['last_update']) > 48*360) {
+                if(strtotime(time() - $row['last_update']) > 24*360) {
                     $row['title'] = $feed['title'];
                     $row['description'] = $feed['description'];
                     $row['velocity'] = $feed['velocity'];
@@ -128,7 +220,14 @@ class category_controller extends controller
                     $row['cover_url'] = $feed['coverUrl'];
                     $row['visual_url'] = $feed['visualUrl'];
                     $row['last_update'] = date('Y-m-d H:i:s');
-                    $this->model('feeds')->insert($row);
+                    $row['id'] = $this->model('feeds')->insert($row);
+                    $this->model('feed_tags')->delete('feed_id', $feed['id']);
+                    foreach ($feed['tag'] as $tag) {
+                        $this->model('feed_tags')->insert(array(
+                            'feed_id' => $row['id'],
+                            'tag_name' => $tag
+                        ));
+                    }
                 }
                 $feeds[] = $row;
             } else {
@@ -143,6 +242,13 @@ class category_controller extends controller
                 $row['visual_url'] = tools_class::checkImgUrl($feed['visualUrl']) ? $feed['visualUrl'] : '';
                 $row['last_update'] = date('Y-m-d H:i:s');
                 $row['id'] = $this->model('feeds')->insert($row);
+                $this->model('feed_tags')->delete('feed_id', $feed['id']);
+                foreach ($feed['tag'] as $tag) {
+                    $this->model('feed_tags')->insert(array(
+                        'feed_id' => $row['id'],
+                        'tag_name' => $tag
+                    ));
+                }
                 $feeds[] = $row;
             }
         }

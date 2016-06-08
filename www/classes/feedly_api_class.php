@@ -68,9 +68,26 @@ class feedly_api_class extends base
         return $this->makeApiCall($url, 'GET');
     }
 
-    public function getStream($stream_id)
+    public function getStream($stream_id, $newer_than = 0, $unread_only = true)
     {
+        if(!$newer_than) {
+            $params['newerThan'] = time() - 24*3600;
+        } else {
+            $params['newerThan'] = $newer_than;
+        }
+        $params['unreadOnly'] = $unread_only;
         $url = API_URL . '/v3/streams/' . urlencode($stream_id) . '/ids';
+        return $this->makeApiCall($url, 'GET');
+    }
+
+    public function getMix($stream_id, $count = 10, $unread_only = true, $hours = 24, $locale = 'EN_en')
+    {
+        $params = [];
+        $params['count'] = $count;
+        $params['unread_only'] = $unread_only;
+        $params['hours'] = $hours;
+        $params['locale'] = $locale;
+        $url = API_URL . '/v3/mixes/' . urlencode($stream_id) . '/contents' . ($params ? '?' . http_build_query($params) : '');
         return $this->makeApiCall($url, 'GET');
     }
 

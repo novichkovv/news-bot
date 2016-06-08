@@ -7,6 +7,7 @@
  */
 class base
 {
+    private $api_instance;
 
     /**
      * @param $model
@@ -87,5 +88,13 @@ class base
     {
         $class_name = $event . '_event';
         return new $class_name($data);
+    }
+
+    public function api()
+    {
+        if(!$this->api_instance) {
+            $this->api_instance = new feedly_api_class(registry::get('user')['id']);
+        }
+        return $this->api_instance;
     }
 }

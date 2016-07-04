@@ -8,6 +8,7 @@
 class base
 {
     private $api_instance;
+    private $feed_instance;
 
     /**
      * @param $model
@@ -96,5 +97,13 @@ class base
             $this->api_instance = new feedly_api_class(registry::get('user')['id']);
         }
         return $this->api_instance;
+    }
+
+    public function feed()
+    {
+        if(!$this->feed_instance) {
+            $this->feed_instance = new feed_class();
+        }
+        return $this->feed_instance;
     }
 }

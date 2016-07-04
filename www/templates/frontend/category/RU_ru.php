@@ -1,4 +1,7 @@
 <div class="container">
+    <?php if ($tags): ?>
+        <a href="<?php echo SITE_DIR; ?>" id="go_to_feed">Читать ленту</a>
+    <?php endif; ?>
     <div class="row">
         <div class="col-md-offset-2 col-md-8">
             <label>Подберите контент для своей ленты</label>
@@ -11,17 +14,21 @@
     <h3>Лучшее из сети</h3>
     <div class="row">
         <?php foreach ($list as $key => $item): ?>
-            <!--           <a href="--><?php //echo SITE_DIR; ?><!--category/search/?q=--><?php //echo $key; ?><!--">-->
-            <a href="#modal" data-key="<?php echo $key; ?>" data-toggle="modal" class="modal-btn">
-                <div class="col-md-4 col-sm-6">
-                    <div class="category">
-                        <img src="<?php echo SITE_DIR; ?>images/topics/<?php echo $key; ?>.jpeg" alt="<?php echo $item['title']; ?>">
-                        <div class="title" style="background-color: <?php echo $item['bg']; ?>; color: <?php echo $item['color']; ?>">
-                            <?php echo $item[$locale]; ?>
+<!--            <a href="#modal" data-key="--><?php //echo $key; ?><!--" class="modal-btn">-->
+            <div class="col-md-4 col-sm-6">
+                <div class="category subscribe-btn<?php if ($tags[$key]) echo ' subscribed' ?>" data-key="<?php echo $key; ?>">
+                    <?php if ($tags[$key]): ?>
+                        <div class="checked_background">
+                            <img src="<?php echo SITE_DIR; ?>images/mark.png">
                         </div>
+                    <?php endif; ?>
+                    <img src="<?php echo SITE_DIR; ?>images/topics/<?php echo $key; ?>.jpeg" alt="<?php echo $item['title']; ?>">
+                    <div class="title" style="background-color: <?php echo $item['bg']; ?>; color: <?php echo $item['color']; ?>">
+                        <?php echo $item[$locale]; ?>
                     </div>
                 </div>
-            </a>
+            </div>
+<!--            </a>-->
         <?php endforeach; ?>
     </div>
 </div>
@@ -48,9 +55,10 @@
 <script type="text/javascript">
     $ = jQuery.noConflict();
     $(document).ready(function () {
-        $(".modal-btn").click(function() {
-            var category = $(this).find('.category').clone();
+        $('body').on('click', ".subscribe-btn:not('.subscribed')", function() {
+            $(this).addClass('subscribed');
             var key = $(this).attr('data-key');
+            alert(key);
             var params = {
                 'action': 'subscribe',
                 'values': {'category': key},
@@ -59,7 +67,23 @@
                 }
             };
             ajax(params);
-            $(".cat-container").html(category);
+            $(this).prepend('' +
+            '<div class="checked_background">' +
+            '    <img src="<?php echo SITE_DIR; ?>images/mark.png">' +
+            '</div>');
+        });
+        $("body").on("click", ".subscribed", function () {
+            var key = $(this).attr('data-key');
+            var params = {
+                'action': 'unsubscribe',
+                'values': {category: key},
+                'callback': function (msg) {
+
+                }
+            };
+            ajax(params);
+            $(this).removeClass('subscribed');
+            $(this).find('.checked_background').remove();
         });
     });
 </script>

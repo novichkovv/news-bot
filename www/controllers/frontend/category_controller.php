@@ -21,7 +21,11 @@ class category_controller extends controller
 
     public function index()
     {
-        print_r($this->api()->getMix('topic/food', 30, 1, 24,'RU_ru'));exit;
+///        $feed = new feed_class();
+//         echo $feed->subscribeToTag('tech');
+//        print_r($this->api()->getSubscriptions());
+//        exit;
+//        print_r($this->api()->getMix('topic/food', 30, 1, 24,'RU_ru'));exit;
         $this->addStyle(SITE_DIR . 'css/libs/bootstrap.min.css');
         $list = array(
             'tech' => array(
@@ -98,6 +102,11 @@ class category_controller extends controller
             )
 
         );
+        $tags = [];
+        foreach ($this->model('tags')->getUserTags(registry::get('user')['id']) as $tag) {
+            $tags[$tag['tag_name']] = $tag;
+        }
+        $this->render('tags', $tags);
         $this->render('locale', $this->locale);
         $this->render('list', $list);
         $this->view('category' . DS . $this->locale);
@@ -112,6 +121,7 @@ class category_controller extends controller
     {
         switch ($_REQUEST['action']) {
             case "subscribe":
+                $this->feed()->subscribeToTag($_POST['category']);
                 /*
                 if(!$tag = $this->model('tags')->getByField('tag_name', $_POST['category'])) {
                     $tag = array('tag_name' => $_POST['category']);
@@ -165,7 +175,13 @@ class category_controller extends controller
                 */
                 exit;
                 break;
+
+            case "unsubscribe":
+                exit;
+                break;
         }
+
+
     }
 
     public function index_na_ajax()

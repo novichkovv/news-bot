@@ -171,6 +171,15 @@ abstract class controller extends base
     protected function checkAuth()
     {
         $this->user = $this->model('users')->getById(1);
+        registry::set('auth', true);
+        registry::set('user', $this->user);
+        if(!$this->user['feedly_id'] && $this->user['refresh_token']) {
+            $profile = $this->api()->getProfile();
+            $this->user['feedly_id'] = $profile['id'];
+            $this->model('users')->insert($this->user);
+            registry::remove('user');
+            registry::set('user', $this->user);
+        }
 //        if($_SESSION['auth']) {
 //            if($user = $this->model('backend_users')->getByFields(array(
 //                'id' => $_SESSION['user']['id'],

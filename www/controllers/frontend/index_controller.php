@@ -14,7 +14,11 @@ class index_controller extends controller
             $api = new feedly_api_class(1);
             header('Location: ' . $api->createAuthUrl(1));
         } else {
-            $articles = $this->getFeeds();
+//            echo urldecode('user%2F19c7c186-e129-423e-8fdb-f9e1156d4cf4%2Fcategory%2Fglobal.all');exit;
+//            print_r(registry::get('user'));
+//            $articles = $this->getFeeds();
+            $articles = $this->feed()->getUserMix();
+//            print_r($articles); exit;
             $this->render('first_article', array_shift($articles));
             $this->render('next', array_keys($articles)[0]);
             $this->render('articles', $articles);
@@ -53,7 +57,7 @@ class index_controller extends controller
                     $row['entry_id'] = $article['id'];
                     $row['stream_id'] = $article['origin']['streamId'];
                     $row['thumbnail'] = $thumb;
-                    $row['content'] = $content;
+                    $row['content'] = $content->innertext;
                     $row['title'] = $article['title'];
                     $row['summary'] = $article['summary']['content'];
                     $row['keywords'] = implode(',', $article['keywords']);

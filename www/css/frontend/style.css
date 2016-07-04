@@ -57,3 +57,26 @@
     color: #ffffff;
     font-size: 30px;
 }
+.full-text {
+    display: none;
+}
+.read_all {
+    color: #003bb3;
+    text-decoration: underline;
+}
+#fixed_head {
+    position: fixed;
+    top: 0;
+    text-align: right;
+    width: 100%;
+}
+#fixed_head a {
+    color: #666;
+    border: 1px solid #666;
+    text-decoration: none;
+    /*float: right;*/
+    padding: 2px 7px;
+    margin: 5px;
+    background-color: rgba(255,255,255,0.5);
+    font-size: 20px;
+}

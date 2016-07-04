@@ -64,6 +64,40 @@ class tools_class
 
     public function simpleHtml()
     {
+    }
 
+    public static function cropContent($html, $length)
+    {
+        $out = '';
+        $arr = preg_split('/(<.+?>|&#?\\w+;)/s', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $tagStack = array();
+
+        for($i = 0, $l = 0; $i < count($arr); $i++) {
+            if( $i & 1 ) {
+                if( substr($arr[$i], 0, 2) == '</' or substr($arr[$i], 0, 2) == '[/') {
+                    array_pop($tagStack);
+                } elseif( $arr[$i][0] == '&' ) {
+                    $l++;
+                } elseif( substr($arr[$i], -2) != '/>' or substr($arr[$i], -2) != '/]') {
+                    array_push($tagStack, $arr[$i]);
+                }
+
+                $out .= $arr[$i];
+            } elseif( substr($arr[$i], -2) != '/>' ) {
+                if( ($l += strlen($arr[$i])) >= $length ) {
+                    $out .= substr($arr[$i], 0, $length - $l + strlen($arr[$i]));
+                    break;
+                } else {
+                    $out .= $arr[$i];
+                }
+            }
+        }
+        $x = false;
+        while( ($tag = array_pop($tagStack)) !== NULL ) {
+            $out .= (!$x ? ' <span class="read_all">read more...</span>' : '') . '</' . strtok(substr($tag, 1), " \t>") . '>';
+            $x = true;
+        }
+
+        return $out;
     }
 }

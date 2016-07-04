@@ -1,3 +1,6 @@
+<div id="fixed_head">
+    <a id="cat_link" href="<?php echo SITE_DIR; ?>category/" class="btn btn-icon btn-default pull-right"><i class="fa fa-bars"></i> </a>
+</div>
 <div id="back" style="display: none">
     <div id="back_button">
         Back to feed
@@ -35,7 +38,16 @@
                     <h1 class="title"><?php echo $article['title']; ?></h1>
                     <h2 class="description"><?php echo $article['summary']; ?></h2>
                     <div class="text">
-                        <?php echo $article['content']; ?>
+                        <?php if (strlen($article['content']) > 1000): ?>
+                            <div class="short-text">
+                                <?php echo tools_class::cropContent($article['content'], 200); ?>
+                            </div>
+                            <div class="full-text">
+                                <?php echo $article['content']; ?>
+                            </div>
+                        <?php else: ?>
+                            <?php echo $article['content']; ?>
+                        <?php endif; ?>
                     </div>
                     <?php /*
         <div class="ads">
@@ -153,13 +165,18 @@
     $(document).ready(function () {
         $('img').removeAttr('height');
         $('img').removeAttr('width');
-        scroll();
+        $(".read_all").click(function() {
+            var $text = $(this).closest('.text');
+            $text.find('.short-text').remove();
+            $text.find('.full-text').slideDown();
+        });
+//        scroll();
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 'auto',
             centeredSlides: true,
             spaceBetween: 10
         });
-        $("body").on("click", "a", function (e) {
+        $("body").on("click", "a:not(#cat_link)", function (e) {
             e.preventDefault();
             $('#back').show();
             $('#main').hide();
@@ -172,32 +189,32 @@
         })
     });
 
-    function scroll() {
-        $(window).scroll(function() {
-            var height = $("#marker").offset().top;
-            if($(window).scrollTop() >= height - $(window).height()) {
-                $(window).unbind('scroll');
-                var params = {
-                    'action': 'get_article',
-                    'values': {id: $("#next_id").val()},
-                    'callback': function (msg) {
-                        ajax_respond(msg,
-                            function (respond) { //success
-                                setTimeout(function() {
-                                    $("#articles").append(respond.template);
-                                    $("#next_id").val(respond.next);
-                                    scroll();
-                                }, 3000);
-                            },
-                            function (respond) { //fail
-                            }
-                        );
-                    }
-                };
-                ajax(params);
-            }
-        })
-    }
+//    function scroll() {
+//        $(window).scroll(function() {
+//            var height = $("#marker").offset().top;
+//            if($(window).scrollTop() >= height - $(window).height()) {
+//                $(window).unbind('scroll');
+//                var params = {
+//                    'action': 'get_article',
+//                    'values': {id: $("#next_id").val()},
+//                    'callback': function (msg) {
+//                        ajax_respond(msg,
+//                            function (respond) { //success
+//                                setTimeout(function() {
+//                                    $("#articles").append(respond.template);
+//                                    $("#next_id").val(respond.next);
+//                                    scroll();
+//                                }, 3000);
+//                            },
+//                            function (respond) { //fail
+//                            }
+//                        );
+//                    }
+//                };
+//                ajax(params);
+//            }
+//        })
+//    }
 </script>
 <style>
 /* line 2, ../scss/_extensions.scss */

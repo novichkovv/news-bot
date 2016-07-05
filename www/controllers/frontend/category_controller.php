@@ -23,10 +23,12 @@ class category_controller extends controller
     {
 ///        $feed = new feed_class();
 //         echo $feed->subscribeToTag('tech');
-//        foreach ($this->api()->getSubscriptions() as $feed) {
-//            $feeds[] = $feed['id'];
-//        }
-//        $this->api()->unsubscribe($feeds);
+        if($_GET['unsub']) {
+            foreach ($this->api()->getSubscriptions() as $feed) {
+                $feeds[] = $feed['id'];
+            }
+            $this->api()->unsubscribe($feeds);
+        }
 //        print_r($this->api()->getSubscriptions());
 //        exit;
 //        print_r($this->api()->getMix('topic/food', 30, 1, 24,'RU_ru'));exit;

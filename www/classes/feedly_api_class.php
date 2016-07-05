@@ -44,10 +44,10 @@ class feedly_api_class extends base
         return $this->makeApiCall($url, 'GET');
     }
 
-    public function getFeeds()
+    public function getFeeds($ids)
     {
         $url = API_URL . '/v3/feeds/.mget';
-        return $this->makeApiCall($url, 'GET');
+        return $this->makeApiCall($url, 'POST', $ids);
     }
 
     public function getPreferences()
@@ -63,6 +63,12 @@ class feedly_api_class extends base
             $url .= '/.mput';
         }
         return $this->makeApiCall($url, 'POST', $params);
+    }
+
+    public function unsubscribe($feeds)
+    {
+        $url = API_URL . '/v3/subscriptions/.mdelete';
+        return $this->makeApiCall($url, 'DELETE', $feeds);
     }
 
     public function getTags()
@@ -197,6 +203,7 @@ class feedly_api_class extends base
                 break;
             case "DELETE":
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
                 break;
             default:
                 self::writeLog('EXCHANGE', 'INVALID METHOD ' . $method);
@@ -205,7 +212,7 @@ class feedly_api_class extends base
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         $response = curl_exec($curl);
-        $this->writeLog('test', $response);
+//        $this->writeLog('test', $response);
         return json_decode($response, true);
     }
 

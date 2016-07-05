@@ -31,6 +31,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="feed-info">
+                    <div class="pull-left">
+                        <?php if ($article['icon_url']): ?>
+                            <img class="feed_icon" alt="<?php echo $article['feed_title']; ?>" title="<?php echo $article['feed_title']; ?>" src="<?php echo $article['icon_url']; ?>">
+                        <?php endif; ?>
+                        <span class="feed_title">
+                    <?php echo $article['feed_title']; ?>
+                    </span>
+                        <div class="likes">
+                            <a><img src="<?php echo SITE_DIR; ?>images/like.png"></a>
+                            <a><img src="<?php echo SITE_DIR; ?>images/dislike.png"></a>
+                        </div>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <hr>
+                </div>
                 <div class="content">
                     <h3 class="byline">
                         Published <time><?php echo date('F d, Y', strtotime($article['publish_date'])); ?></time> by <span class="author"><?php echo $article['author']; ?></span>

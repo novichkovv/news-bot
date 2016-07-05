@@ -37,6 +37,9 @@ class feed_class extends base
                 $content = $html->root;
                 $thumb = $content->find('img')[0]->src;
                 $content->find('img')[0]->outertext = '';
+                if(!$this->model('feeds')->getByField('feed_id', $article['origin']['streamId'])) {
+                    $this->getFeeds([$article['origin']['streamId']]);
+                }
                 $row = [];
                 $row['entry_id'] = $article['id'];
                 $row['stream_id'] = $article['origin']['streamId'];
@@ -63,13 +66,13 @@ class feed_class extends base
             $stream = 'user/' . registry::get('user')['feedly_id'] . '/category/global.all';
             $tmp = $this->api()->getMix($stream);
             $this->model('user_mixes')->delete('user_id', registry::get('user')['id']);
-            $articles = [];
+            $ids = [];
             $date = date('Y-m-d H:i:s');
             $user_mix = [];
             foreach ($tmp['items'] as $item) {
                 $article = $this->getCheckedArticle($item);
                 $user_mix[] = ['user_id' => registry::get('user')['id'], 'article_id' => $article['id'], 'create_date' => $date];
-                $articles[] = $article;
+                $ids[] = $article['id'];
             }
             $this->model('user_mixes')->insertRows($user_mix);
         } else {
@@ -77,8 +80,8 @@ class feed_class extends base
             foreach ($mix as $v) {
                 $ids[] = $v['article_id'];
             }
-            $articles = $this->model('articles')->getByFieldIn('id', $ids, true);
         }
+        $articles = $this->model('articles')->getArticles($ids);
         return $articles;
     }
 
@@ -119,7 +122,10 @@ class feed_class extends base
                 }
             }
         }
+        print_r($new_feeds);
+        print_r(array_merge($new_feeds, $feeds_to_update));
         foreach ($this->api()->getFeeds(array_merge($new_feeds, $feeds_to_update)) as $feed) {
+//            print_r($feed);
             if($feeds_to_update[$feed['id']]) {
                 $row['id'] = $feeds[$feed['id']]['id'];
             }
@@ -171,7 +177,7 @@ class feed_class extends base
                 $params = [];
                 $count = 0;
                 foreach ($feeds_to_subscribe as $feed_id) {
-                    $params[$count]['categories'][] = array(
+                    $params[$count]['categories'][0] = array(
                         'id' => "user/" . registry::get('user')['feedly_id'] . "/category/$tag_name",
                         'label' => $tag_name
                     );
@@ -198,6 +204,10 @@ class feed_class extends base
                 $content = $article['summary']['content'];
             } else {
                 $row['summary'] = $article['summary']['content'];
+            }
+            if(!$this->model('feeds')->getByField('feed_id', $article['origin']['streamId'])) {
+                echo 'getFeeds - ' . $article['origin']['streamId'] . "\n";
+                $this->getFeeds([$article['origin']['streamId']]);
             }
             $html = str_get_html($content);
             $content = $html->root;

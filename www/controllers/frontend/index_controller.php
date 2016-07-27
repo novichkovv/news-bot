@@ -9,6 +9,10 @@ class index_controller extends controller
 {
     public function index()
     {
+//        print_r();
+//        print_r($this->feed()->getUserPriorMix(1));
+//        print_r($this->feed()->getUserPriorMix(2));
+//        exit;
         $this->user = $this->model('users')->getById(1);
         if(!$this->user['refresh_token']) {
             $api = new feedly_api_class(1);
@@ -17,11 +21,10 @@ class index_controller extends controller
 //            echo urldecode('user%2F19c7c186-e129-423e-8fdb-f9e1156d4cf4%2Fcategory%2Fglobal.all');exit;
 //            print_r(registry::get('user'));
 //            $articles = $this->getFeeds();
-            $articles = $this->feed()->getUserMix();
-//            print_r($articles); exit;
-            $this->render('first_article', array_shift($articles));
-            $this->render('next', array_keys($articles)[0]);
-            $this->render('articles', $articles);
+            //$articles = $this->feed()->getUserMix();
+//            $this->render('first_article', array_shift($articles));
+//                $this->render('next', array_keys($articles)[0]);
+
         }
         $this->view('index' . DS . 'index');
     }
@@ -29,6 +32,27 @@ class index_controller extends controller
     public function index_na()
     {
         $this->index();
+    }
+
+    public function index_ajax()
+    {
+        switch ($_REQUEST['action']) {
+
+            case "get_article":
+                $this->render('first_article', $this->model('articles')->getByField('entry_id', $_POST['id']));
+                $template = $this->fetch('index' . DS . 'ajax' . DS . 'article');
+                $next = $_SESSION['entries'][array_search($_POST['id'], $_SESSION['entries']) + 1];
+                echo json_encode(array('status' => 1, 'template' => $template, 'next' => $next));
+                exit;
+                break;
+
+            case "get_feed":
+                $articles = $this->feed()->getUserPriorMix();
+                $this->render('articles', $articles);
+                $this->view_only('index' . DS . 'ajax' . DS . 'articles');
+                exit;
+                break;
+        }
     }
 
     private function getFeeds()
@@ -89,18 +113,12 @@ class index_controller extends controller
         return $articles;
     }
 
-    public function index_ajax()
-    {
-        switch ($_REQUEST['action']) {
-            case "get_article":
-                $this->render('first_article', $this->model('articles')->getByField('entry_id', $_POST['id']));
-                $template = $this->fetch('index' . DS . 'ajax' . DS . 'article');
-                $next = $_SESSION['entries'][array_search($_POST['id'], $_SESSION['entries']) + 1];
-                echo json_encode(array('status' => 1, 'template' => $template, 'next' => $next));
-                exit;
-                break;
-        }
-    }
+//    public function index_ajax()
+//    {
+//        switch ($_REQUEST['action']) {
+//
+//        }
+//    }
 
     public function index_na_ajax()
     {

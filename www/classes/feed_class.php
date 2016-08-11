@@ -26,6 +26,7 @@ class feed_class extends base
         if($new_articles) {
             require_once(ROOT_DIR . 'classes' . DS . 'simple_html_dom_class.php');
             $tmp = $this->api()->getEntries($new_articles);
+            $this->writeLog('test', $tmp);
             foreach ($tmp as $article) {
                 if(!$article['id']) {
                     continue;

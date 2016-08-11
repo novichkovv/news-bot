@@ -150,6 +150,9 @@ class feed_class extends base
             $row['cover_url'] = $feed['coverUrl'];
             $row['visual_url'] = $feed['visualUrl'];
             $row['last_update'] = date('Y-m-d H:i:s');
+            if(!$row['feed_id']) {
+                return false;
+            }
             $row['id'] = $this->model('feeds')->insert($row);
             if(!$feeds_to_update[$feed['id']]) {
                 $this->model('user_feeds')->insert([
@@ -163,9 +166,6 @@ class feed_class extends base
                     'feed_id' => $row['id'],
                     'tag_name' => $tag
                 ));
-            }
-            if(!$feed['id']) {
-                return false;
             }
             $res[$row['feed_id']] = $feed['id'];
         }

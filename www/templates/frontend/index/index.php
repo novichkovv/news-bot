@@ -11,7 +11,7 @@
 
 </div>
 <div id="preloader" style="text-align: center; padding-top: 70px;">
-    Please wait while we are preparing your feed..
+    Please wait while we are preparing your feed..<br>
     <img src="<?php echo SITE_DIR; ?>images/89.gif">
 </div>
 
@@ -19,6 +19,49 @@
 
     $ = jQuery.noConflict();
     $(document).ready(function () {
+
+        $("body").on("click", ".like_btn", function () {
+            var $button = $(this);
+            var feed_id = $button.attr('data-id');
+            var params = {
+                'action': 'like_feed',
+                'values': {feed_id: feed_id},
+                'callback': function (msg) {
+                    ajax_respond(msg,
+                        function (respond) { //success
+                            $button.closest('.likes').find('.dislike_btn').remove();
+                            $button.remove();
+
+                        },
+                        function (respond) { //fail
+                        }
+                    );
+                }
+            };
+            ajax(params);
+        });
+
+        $("body").on("click", ".dislike_btn", function () {
+            var $button = $(this);
+            var feed_id = $button.attr('data-id');
+            var params = {
+                'action': 'dislike_feed',
+                'values': {feed_id: feed_id},
+                'callback': function (msg) {
+                    ajax_respond(msg,
+                        function (respond) { //success
+                            $button.closest('.likes').find('.like_btn').remove();
+                            $button.remove();
+
+                        },
+                        function (respond) { //fail
+                        }
+                    );
+                }
+            };
+            ajax(params);
+        });
+
         var params = {
             'action': 'get_feed',
             'values': {page: 0},
@@ -53,6 +96,13 @@
                 setTimeout(function() {
                     $("#main").fadeIn();
                 }, 1000);
+                $(".big-image img").each(function() {
+                    var $img = $(this);
+                    var size = getImgSize($img.attr('src'));
+                    if(size[0] < 100 || size[1] < 100) {
+                        $(this).remove();
+                    }
+                });
 //                $(document).ready(function() {
 //
 //                })
@@ -65,6 +115,16 @@
             $('#main').show();
         })
     });
+    function getImgSize(imgSrc) {
+        var newImg = new Image();
+        var size = [];
+        newImg.onload = function() {
+            size[0] = newImg.width;
+            size[1] = newImg.height;
+        };
+        newImg.src = imgSrc; // this must be done AFTER setting onload
+        return size;
+    }
 
 //    function scroll() {
 //        $(window).scroll(function() {
@@ -112,12 +172,12 @@
 
 /* line 13, ../scss/_extensions.scss */
 .big-image, body article.page .big-image {
-    height: 300px;
+    /*height: 300px;*/
 }
 @media only screen and (min-width: 500px) {
     /* line 13, ../scss/_extensions.scss */
     .big-image, body article.page .big-image {
-        height: 420px;
+        /*height: 420px;*/
     }
 }
 
@@ -321,7 +381,7 @@ body article.page .big-image .inner .fader .text h2 {
 }
 /* line 119, ../scss/styles.scss */
 body article.page .content {
-    padding: 0 1.8em;
+    padding: 0 8px;
 }
 /* line 123, ../scss/styles.scss */
 body article.page .content h3 {

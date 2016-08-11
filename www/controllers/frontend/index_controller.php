@@ -9,24 +9,14 @@ class index_controller extends controller
 {
     public function index()
     {
-//        print_r();
-//        print_r($this->feed()->getUserPriorMix(1));
-//        print_r($this->feed()->getUserPriorMix(2));
-//        exit;
         $this->user = $this->model('users')->getById(1);
         if(!$this->user['refresh_token']) {
             $api = new feedly_api_class(1);
             header('Location: ' . $api->createAuthUrl(1));
         } else {
-//            echo urldecode('user%2F19c7c186-e129-423e-8fdb-f9e1156d4cf4%2Fcategory%2Fglobal.all');exit;
-//            print_r(registry::get('user'));
-//            $articles = $this->getFeeds();
-            //$articles = $this->feed()->getUserMix();
-//            $this->render('first_article', array_shift($articles));
-//                $this->render('next', array_keys($articles)[0]);
-
+            $this->view('index' . DS . 'index');
         }
-        $this->view('index' . DS . 'index');
+
     }
 
     public function index_na()
@@ -50,6 +40,28 @@ class index_controller extends controller
                 $articles = $this->feed()->getUserPriorMix();
                 $this->render('articles', $articles);
                 $this->view_only('index' . DS . 'ajax' . DS . 'articles');
+                exit;
+                break;
+
+            case "like_feed":
+                $user_feed = $this->model('user_feeds')->getByField('feed_id', $_POST['feed_id']);
+                $user_feed['priority'] ++;
+                $this->model('user_feeds')->insert($user_feed);
+                echo json_encode(array('status' => 1));
+                exit;
+                break;
+
+            case "dislike_feed":
+                $user_feed = $this->model('user_feeds')->getByField('feed_id', $_POST['feed_id']);
+                $user_feed['priority'] --;
+                if($user_feed['priority']) {
+                    $this->model('user_feeds')->insert($user_feed);
+                } else {
+                    $this->model('user_feeds')->deleteById($user_feed['id']);
+                    $feed = $this->model('feeds')->getById($_POST['feed_id']);
+                    $this->api()->unsubscribe([$feed['feed_id']]);
+                }
+                echo json_encode(array('status' => 1));
                 exit;
                 break;
         }

@@ -4,7 +4,9 @@
     <?php foreach ($articles as $article): ?>
         <article class="page current">
             <?php if ($article['thumbnail']): ?>
-                <div class="big-image" style="background-image: url(<?php echo $article['thumbnail']; ?>);"></div>
+                <div class="big-image">
+                    <img src="<?php echo $article['thumbnail']; ?>" style="width: 100%;">
+                </div>
             <?php else: ?>
                 <div style="width: 100%; height: 20px; background-color: #3e94c3;"></div>
             <?php endif; ?>
@@ -18,8 +20,8 @@
                     <?php echo $article['feed_title']; ?>
                     </span>
                     <div class="likes">
-                        <button type="button" class="like_btn" style="border: none; background: none; padding: 0"><img src="<?php echo SITE_DIR; ?>images/like.png"></button>
-                        <button type="button" class="dislike_btn" style="border: none; background: none; padding: 0"><img src="<?php echo SITE_DIR; ?>images/dislike.png"></button>
+                        <button type="button" data-id="<?php echo $article['feed_id']; ?>" class="like_btn" style="border: none; background: none; padding: 0"><img src="<?php echo SITE_DIR; ?>images/like.png"></button>
+                        <button type="button" data-id="<?php echo $article['feed_id']; ?>" class="dislike_btn" style="border: none; background: none; padding: 0"><img src="<?php echo SITE_DIR; ?>images/dislike.png"></button>
                     </div>
                 </div>
                 <div style="clear: both;"></div>

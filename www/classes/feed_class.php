@@ -23,9 +23,6 @@ class feed_class extends base
                 $res[$id] = $articles[$id];
             }
         }
-//        print_r($res);
-//        print_r($new_articles);
-//        exit;
         if($new_articles) {
             require_once(ROOT_DIR . 'classes' . DS . 'simple_html_dom_class.php');
             $tmp = $this->api()->getEntries($new_articles);
@@ -42,8 +39,17 @@ class feed_class extends base
                 $html = str_get_html($content);
                 $content = $html->root;
                 $thumb = $content->find('img')[0]->src;
+                $image = '';
+//                if($thumb) {
+//                    if($size = getimagesize($thumb)) {
+//                        if($size[0] > 100 && $size[1] > 100) {
+//                            $image = $thumb;
+//                            $this->writeLog('test', $image);
+//                        }
+//                    }
+//                }
                 @$content->find('img')[0]->outertext = '';
-                if(!$feed_id = $this->model('feeds')->getByField('feed_id', $article['origin']['streamId'])) {
+                if(!$feed_id = $this->model('feeds')->getByField('feed_id', $article['origin']['streamId'])['id']) {
                     $res = $this->getFeeds([$article['origin']['streamId']]);
                     $feed_id = $res[array_keys($res)[0]];
                 }
@@ -224,6 +230,14 @@ class feed_class extends base
             $html = str_get_html($content);
             $content = $html->root;
             $thumb = $content->find('img')[0]->src;
+            $image = '';
+//            if($thumb) {
+//                if($size = getimagesize($thumb)) {
+//                    if($size[0] > 100 && $size[1] > 100) {
+//                        $image = $thumb;
+//                    }
+//                }
+//            }
             $content->find('img')[0]->outertext = '';
             $row = [];
             $row['entry_id'] = $article['id'];
@@ -273,6 +287,7 @@ class feed_class extends base
             if($rows) {
                 $this->model('feed_queries')->insertRows($rows);
             }
+            $articles = $this->model('articles')->getByFieldIn('id', $feed_articles['ids'], true);
         } else {
             $article_ids = [];
             foreach ($queries as $query) {
@@ -301,6 +316,7 @@ class feed_class extends base
             for($i = $feed['priority']*$page + $page; $i <= $feed['priority'] + $feed['priority']*$page + $page; $i ++) {
                 $feed_articles[$feed['feed_id']][$i]['feed_title'] = $feeds[$feed['feed_id']]['title'];
                 $feed_articles[$feed['feed_id']][$i]['icon_url'] = $feeds[$feed['feed_id']]['icon_url'];
+                $feed_articles[$feed['feed_id']][$i]['feed_id'] = $feeds[$feed['feed_id']]['id'];
                 $res[] = $feed_articles[$feed['feed_id']][$i];
             }
         }

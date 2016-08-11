@@ -164,6 +164,9 @@ class feed_class extends base
                     'tag_name' => $tag
                 ));
             }
+            if(!$feed['id']) {
+                return false;
+            }
             $res[$row['feed_id']] = $feed['id'];
         }
         return $res;
@@ -230,14 +233,6 @@ class feed_class extends base
             $html = str_get_html($content);
             $content = $html->root;
             $thumb = $content->find('img')[0]->src;
-            $image = '';
-//            if($thumb) {
-//                if($size = getimagesize($thumb)) {
-//                    if($size[0] > 100 && $size[1] > 100) {
-//                        $image = $thumb;
-//                    }
-//                }
-//            }
             $content->find('img')[0]->outertext = '';
             $row = [];
             $row['entry_id'] = $article['id'];
